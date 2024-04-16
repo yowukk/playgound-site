@@ -124,6 +124,7 @@ ymaps.ready(init);
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
+var is_sent = false
 //* checker
 function checker() {
 	let flag = true
@@ -154,24 +155,28 @@ function checker() {
 
 	//* email sending
 	if (flag) {
-		$(function() {
-			
-			//E-mail Ajax Send
-			$("form").submit(function() { //Change
-				var th = $(this);
-				$.ajax({
-					type: "POST",
-					url: "mail.php", //Change
-					data: th.serialize()
-				}).done(function() {
-					alert("Thank you!");
-					document.getElementById('message').classList.add('map-visible')
-					document.getElementById('form').classList.add('map-hidden')
-					setTimeout(() => { window.location.href = "index.html"; }, 3000);
-				});
-				return false;
-			});	
-		});
+		if (!is_sent) {
+			is_sent = true
+			$(function() {
+				
+				//E-mail Ajax Send
+				$("form").submit(function() { //Change
+					is_sent = true
+					var th = $(this);
+					$.ajax({
+						type: "POST",
+						url: "mail.php", //Change
+						data: th.serialize()
+					}).done(function() {
+						alert("Thank you!");
+						document.getElementById('message').classList.add('map-visible')
+						document.getElementById('form').classList.add('map-hidden')
+						setTimeout(() => { window.location.href = "index.html"; }, 3000);
+					});
+					return false;
+				});	
+			});
+		}
 	}
 }
 
